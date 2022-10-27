@@ -1,6 +1,8 @@
 import UIKit
 
-let cardsName = "Black Lotus"
+let blackLotus = "Black Lotus"
+let opt = "Opt"
+let cardsName = blackLotus
 
 var urlMagicComponents = URLComponents()
 urlMagicComponents.scheme = "https"
