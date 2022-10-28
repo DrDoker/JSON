@@ -8,6 +8,11 @@ public extension URLSession {
                 completion(.failure(error!))
                 return
             }
+
+            if let response = response as? HTTPURLResponse {
+                print("Server response code: \(response.statusCode)")
+            }
+
             guard let data = data else {
                 completion(.failure(URLError.dataNotAllowed as! Error))
                 return
