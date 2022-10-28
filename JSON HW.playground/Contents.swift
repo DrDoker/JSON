@@ -22,14 +22,47 @@ func getData(urlReuaest: String) {
             let errorString = error?.localizedDescription ?? ""
             print("Error: \(errorString)")
         } else if let response = response as? HTTPURLResponse, response.statusCode == 200 {
-            guard let data = data else { return }
-            guard let dataAsString = String(data: data, encoding: .utf8) else { return }
             print("Server response code: \(response.statusCode)")
-            print("Data from the server: \(dataAsString)")
+            guard let data = data else { return }
+            parse(json: data)
         } else if let response = response as? HTTPURLResponse {
             print("Server response code: \(response.statusCode)")
         }
     }.resume()
 }
 
+func parse(json: Data) {
+    let decoder = JSONDecoder()
+
+    if let jsonCards = try? decoder.decode(Cards.self, from: json) {
+        let cards = jsonCards.cards
+        cards.forEach { card in
+            card.printCard()
+        }
+    }
+}
+
+// MARK: - Model
+struct Cards: Codable {
+    let cards: [Card]
+}
+
+struct Card: Codable {
+    let name: String
+    let type: String
+    let setName: String
+    let artist: String
+    let imageUrl: String?
+
+    public func printCard() {
+        print("\nName: \(name)")
+        print("Type: \(type)")
+        print("Set Name: \(setName)")
+        print("Artist: \(artist)")
+        print("ImageURL: \(imageUrl ?? "no image")")
+
+    }
+}
+
+// MARK - Start
 getData(urlReuaest: urlString)
