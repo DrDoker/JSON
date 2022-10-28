@@ -12,10 +12,9 @@ urlMagicComponents.queryItems = [
    URLQueryItem(name: "name", value: cardsName)
 ]
 
-let urlString = urlMagicComponents.url?.absoluteString ?? ""
+let magicURL = urlMagicComponents.url
 
-func getData(urlReuaest: String) {
-    let urlReuaest = URL(string: urlReuaest)
+func getData(urlReuaest: URL?) {
     guard let url = urlReuaest else { return }
     URLSession.shared.dataTask(with: url) { data, response, error in
         if error != nil {
@@ -24,14 +23,14 @@ func getData(urlReuaest: String) {
         } else if let response = response as? HTTPURLResponse, response.statusCode == 200 {
             print("Server response code: \(response.statusCode)")
             guard let data = data else { return }
-            parse(json: data)
+            parseCard(json: data)
         } else if let response = response as? HTTPURLResponse {
             print("Server response code: \(response.statusCode)")
         }
     }.resume()
 }
 
-func parse(json: Data) {
+func parseCard(json: Data) {
     let decoder = JSONDecoder()
 
     if let jsonCards = try? decoder.decode(Cards.self, from: json) {
@@ -65,4 +64,4 @@ struct Card: Codable {
 }
 
 // MARK - Start
-getData(urlReuaest: urlString)
+getData(urlReuaest: magicURL)
