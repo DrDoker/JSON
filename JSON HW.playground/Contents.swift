@@ -1,8 +1,6 @@
 import Foundation
 
-let blackLotus = "Black Lotus"
-let opt = "Opt"
-let cardsName = blackLotus
+let cardsName = "Black Lotus|Opt"
 
 var urlMagicComponents = URLComponents()
 urlMagicComponents.scheme = "https"
@@ -13,4 +11,4 @@ urlMagicComponents.queryItems = [URLQueryItem(name: "name", value: cardsName)]
 let magicURL = urlMagicComponents.url
 
 // MARK - Start
-GetData.allCards(urlReuaest: magicURL)
+GetData.allCards(urlReuaest: magicURL, cardsName: ["Opt", "Black Lotus"])

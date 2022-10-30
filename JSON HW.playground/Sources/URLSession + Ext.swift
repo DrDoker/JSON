@@ -4,8 +4,9 @@ public extension URLSession {
 
     func jsonDecodableTask<T: Decodable>(with url: URLRequest, decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<T, Error>) -> Void) -> URLSessionDataTask {
         self.dataTask(with: url) { (data, response, error) in
-            guard error == nil else {
-                completion(.failure(error!))
+
+            if let error = error {
+                completion(.failure(error))
                 return
             }
 
@@ -14,7 +15,9 @@ public extension URLSession {
             }
 
             guard let data = data else {
-                completion(.failure(URLError.dataNotAllowed as! Error))
+                if let error = URLError.dataNotAllowed as? Error {
+                    completion(.failure(error))
+                }
                 return
             }
 
